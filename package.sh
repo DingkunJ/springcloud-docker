@@ -1,28 +1,33 @@
-# 移除原有docker镜像
+read -r -p "是否自动停止容器并删除springcloud-eureka相关镜像? [Y/n] " input
 
-for m in $(docker ps -a | awk '{print $2}' | sed -n '2,$p')
-do
-    result=$(echo $m | grep "springcloud-eureka") # 这里的等号不能有空格
-    if [[ $result != "" ]]              # 这里的等号要有空格
-    then
-        mid=$(docker ps -a | grep $m | awk '{print $1}')
-        echo $mid
-        docker rm -f $mid
-    fi
-done
+if [[ $input == "Y" || $input == "y" ]] 
+then 
+    # 停止已有容器
+    for m in $(docker ps -a | awk '{print $2}' | sed -n '2,$p')
+    do
+        result=$(echo $m | grep "springcloud-eureka")   # 这里的等号不能有空格
+        if [[ $result != "" ]]                          # 这里的等号要有空格
+        then
+            mid=$(docker ps -a | grep $m | awk '{print $1}')
+            echo $mid
+            docker rm -f $mid
+        fi
+    done
 
-for im in $(docker images | awk '{print $1}' | sed -n '2,$p')
-do
-    result=$(echo $im | grep "springcloud-eureka") # 这里的等号不能有空格
-    if [[ $result != "" ]]              # 这里的等号要有空格
-    then
-        imid=$(docker images | grep $im | awk '{print $3}')
-        docker rmi -f $imid
-        echo $im" has been removed"
-    fi
-done
+    # 移除原有docker镜像
+    for im in $(docker images | awk '{print $1}' | sed -n '2,$p')
+    do
+        result=$(echo $im | grep "springcloud-eureka") 
+        if [[ $result != "" ]]              
+        then
+            imid=$(docker images | grep $im | awk '{print $3}')
+            docker rmi -f $imid
+            echo $im" has been removed"
+        fi
+    done
+fi
 
-dirpath=$1
+read -r -p "请输入项目目录" dirpath
 
 servicepath=$dirpath'/springcloud-eureka-service';
 
@@ -30,17 +35,17 @@ cd $servicepath;
 mvn clean;
 mvn install -Dmaven.test.skip=true;
 
+# 打包镜像
 cd $servicepath/springcloud-eureka-registry-service;
 mvn package -Dmaven.test.skip=true docker:build
-
 cd $servicepath/springcloud-eureka-consumer-service/springcloud-eureka-consumer-service-core;
 mvn package -Dmaven.test.skip=true docker:build
-
 cd $servicepath/springcloud-eureka-providerfirst-service/springcloud-eureka-providerfirst-service-core
 mvn package -Dmaven.test.skip=true docker:build
 cd $servicepath/springcloud-eureka-providersecond-service/springcloud-eureka-providersecond-service-core
 mvn package -Dmaven.test.skip=true docker:build
 
+# 构建docker网络
 docker network create --driver bridge springcloud_bridge
 
 # 启动容器
