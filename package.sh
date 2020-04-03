@@ -1,4 +1,4 @@
-read -r -p "是否自动停止容器并删除springcloud-eureka相关镜像? [Y/n] " input
+read -r -p "是否自动停止容器并删除springcloud-eureka相关镜像? [y/n] " input
 
 if [[ $input == "Y" || $input == "y" ]] 
 then 
