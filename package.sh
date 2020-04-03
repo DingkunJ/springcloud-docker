@@ -10,7 +10,7 @@ then
         then
             mid=$(docker ps -a | grep $m | awk '{print $1}')
             echo $mid
-            docker rm -f $mid
+            docker rm -f $m
         fi
     done
 
