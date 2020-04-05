@@ -22,3 +22,15 @@ eureka:
     serviceUrl:
       # 注册中心地址
       defaultZone: http://${eureka.server.host}:8761/eureka/
+
+SayHelloWorld:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule # 随机策略
+
+#修改调用超时时间2s
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 2000
