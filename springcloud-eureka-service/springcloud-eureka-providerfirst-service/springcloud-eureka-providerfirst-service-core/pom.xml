@@ -10,7 +10,6 @@
         <version>1.0</version>
     </parent>
 
-    <!-- 三坐标 -->
     <groupId>com.dk</groupId>
     <artifactId>springcloud-eureka-providerfirst-service-core</artifactId>
     <version>1.0</version>
@@ -61,7 +60,6 @@
 
             <!-- Docker 插件 -->
             <plugin>
-                <!-- 三坐标 -->
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>1.1.1</version>

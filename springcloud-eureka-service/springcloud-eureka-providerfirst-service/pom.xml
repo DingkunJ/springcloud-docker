@@ -10,7 +10,6 @@
         <version>1.0</version>
     </parent>
 
-    <!-- 三坐标 -->
     <groupId>com.dk</groupId>
     <artifactId>springcloud-eureka-providerfirst-service</artifactId>
     <version>1.0</version>
