@@ -9,7 +9,10 @@ then
         if [[ $result != "" ]]
         then
             imid=$(docker images | grep $im | awk '{print $3}')
-            cmid=$(docker ps -a -q | grep $imid)
+            cmid=$(docker ps -a | grep $im | awk '{print $1}')
+            echo $imid
+            echo $cmid
+            docker stop $cmid
             docker rm -f $cmid
             docker rmi -f $imid
             echo $im" has been removed"
